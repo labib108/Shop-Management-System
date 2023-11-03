@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -13,15 +14,24 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::post('/user-registration', [\App\Http\Controllers\UserController::class, 'UserRegistration']);
-Route::post('/user-login', [\App\Http\Controllers\UserController::class, 'UserLogin']);
-Route::post('/send-otp', [\App\Http\Controllers\UserController::class, 'SendOtpCode']);
-Route::post('/verify-otp', [\App\Http\Controllers\UserController::class, 'VerifyOtpCode']);
-Route::post('/reset-password', [\App\Http\Controllers\UserController::class, 'ResetPassword'])
+
+//web api routes
+Route::post('/user-registration', [UserController::class, 'UserRegistration']);
+Route::post('/user-login', [UserController::class, 'UserLogin']);
+Route::post('/send-otp', [UserController::class, 'SendOtpCode']);
+Route::post('/verify-otp', [UserController::class, 'VerifyOtpCode']);
+Route::post('/reset-password', [UserController::class, 'ResetPassword']);
+//oage routes
+Route::get('/userLogin',[UserController::class,'LoginPage']);
+Route::get('/userRegistration',[UserController::class,'RegistrationPage']);
+Route::get('/sendOtp',[UserController::class,'SendOtpPage']);
+Route::get('/verifyOtp',[UserController::class,'VerifyOtpPage']);
+Route::get('/resetPassword',[UserController::class,'ResetPassPage']);
+
+//dashboard routes
+
+Route::get('/userProfile',[UserController::class,'ProfilePage'])
     ->middleware([TokenVerificationMiddleware::class ]);
-
-
-
 
 
 

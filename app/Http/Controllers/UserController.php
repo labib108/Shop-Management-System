@@ -8,10 +8,34 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    function UserRegistration(Request $request)
+    function LoginPage():View{
+        return view('pages.login.login-page');
+    }
+    function RegistrationPage():View{
+        return view('pages.login.registration-page');
+    }
+    function ResetPassPage():View{
+        return view('pages.login.reset-pass-page');
+    }
+    function SendOtpPage():View{
+        return view('pages.login.send-otp-page');
+    }
+    function VerifyOtpPage():View{
+        return view('pages.login.verify-otp-page');
+    }
+    function ProfilePage():View{
+        return view('pages.dashboard.profile-page');
+    }
+
+
+
+
+
+    function UserRegistration(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             User::create([
@@ -24,7 +48,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'User registered successfully'
-            ]);
+            ],200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'failed',
@@ -42,9 +66,8 @@ class UserController extends Controller
             $token = JWTToken::CreateToken($request->input('email'));
             return response()->json([
                 'status' => 'success',
-                'message' => 'User logged in successfully',
-                'token' => $token
-            ]);
+                'message' => 'User login successfully'
+            ],200)->cookie('token', $token, 60 * 24);
         } else {
             return response()->json([
                 'status' => 'failed',
@@ -97,13 +120,20 @@ class UserController extends Controller
 
     function ResetPassword(Request $request) {
         try {
-            $email = $request->header('email');
+            $email = $request->input('email');
             $password = $request->input('password'); // Get the password from the request
             $user = User::where('email','=',$email)->update(['password' => $password]); // Update the password in the database
-            return response()->json([
-                'status' => 'success', // Return a success message
-                'message' => 'Password reset successfully' // Return a success message
-            ]);
+            if ($user) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Password reset successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'User not found or password not updated',
+                ], 404);
+            };
         }catch (Exception $e) {
             return response()->json([
                 'status' => 'failed',
