@@ -35,7 +35,6 @@
         else{
             showLoader()
             let res=await axios.post("/reset-password",{
-                email:sessionStorage.getItem('email'),
                 password:password
             });
             hideLoader();
@@ -50,6 +49,5 @@
                 errorToast(res.data['message'])
             }
         }
-
     }
 </script>

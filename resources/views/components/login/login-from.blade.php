@@ -42,7 +42,7 @@
             let res=await axios.post("/user-login",{email:email, password:password});
             hideLoader()
             if(res.data['status']==='success'){
-                window.location.href="/dashboard.profile-page";
+                window.location.href="/dashboard";
             }
             else{
                 errorToast(res.data['message']);

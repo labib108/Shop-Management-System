@@ -6,12 +6,16 @@ use App\JWTToken\JWTToken;
 use App\Mail\EmailVerification;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
+    function homePage():View{
+        return view('pages.login.login-page');
+    }
     function LoginPage():View{
         return view('pages.login.login-page');
     }
@@ -35,7 +39,7 @@ class UserController extends Controller
 
 
 
-    function UserRegistration(Request $request): \Illuminate\Http\JsonResponse
+    function UserRegistration(Request $request): JsonResponse
     {
         try {
             User::create([
@@ -48,7 +52,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'User registered successfully'
-            ],200);
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'failed',
@@ -61,13 +65,13 @@ class UserController extends Controller
     {
         $count = User::where('email', '=', $request->input('email'))
             ->where('password', '=', $request->input('password'))
-            ->count();
-        if ($count == 1) {
-            $token = JWTToken::CreateToken($request->input('email'));
+            ->select('id')->first();
+        if ($count !== null) {
+            $token = JWTToken::CreateToken($request->input('email'),$count->id );
             return response()->json([
                 'status' => 'success',
                 'message' => 'User login successfully'
-            ],200)->cookie('token', $token, 60 * 24);
+            ])->cookie('token', $token, 60 * 24);
         } else {
             return response()->json([
                 'status' => 'failed',
@@ -120,20 +124,13 @@ class UserController extends Controller
 
     function ResetPassword(Request $request) {
         try {
-            $email = $request->input('email');
+            $email = $request->header('email');
             $password = $request->input('password'); // Get the password from the request
             $user = User::where('email','=',$email)->update(['password' => $password]); // Update the password in the database
-            if ($user) {
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Password reset successfully',
                 ]);
-            } else {
-                return response()->json([
-                    'status' => 'failed',
-                    'message' => 'User not found or password not updated',
-                ], 404);
-            };
         }catch (Exception $e) {
             return response()->json([
                 'status' => 'failed',
@@ -142,4 +139,41 @@ class UserController extends Controller
         }
     }
 
+    public function UserProfile(Request $request) {
+        $email = $request->header('email');
+        $user = User::where('email','=',$email)->first();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User profile fetched successfully',
+                'user' => $user,
+            ]);
+        }
+        function UpdateProfile(Request $request) {
+        try {
+            $email = $request->header('email');
+            $firstName = $request->input('firstName');
+            $lastName = $request->input('lastName');
+            $mobile = $request->input('mobile');
+            $password =  $request->input('password');
+            $user = User::where('email','=',$email)->update([
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'mobile' => $mobile,
+                'password' => $password
+        ]); // Update the password in the database
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Profile updated successfully',
+        ]);
+    }
+    catch (Exception $e) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Invalid email' // Return an error message if the email is invalid',
+        ], 500);
+    }
+}
+    function UserLogout(){
+        return redirect('/userLogin')->cookie('token','',-1);
+    }
 }

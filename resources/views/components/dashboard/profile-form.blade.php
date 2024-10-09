@@ -41,14 +41,14 @@
 </div>
 
 <script>
-    getProfile();
+
+
     async function getProfile(){
         showLoader();
-        let res=await axios.get("/user-profile")
+        let res=await axios.get("/user-profile");
         hideLoader();
-        if(res.status===200 && res.data['status']==='success'){
-            let data=res.data['data'];
-            document.getElementById('email').value=data['email'];
+        if(res.data['status']==='success'){
+            let data = res.data['data']
             document.getElementById('firstName').value=data['firstName'];
             document.getElementById('lastName').value=data['lastName'];
             document.getElementById('mobile').value=data['mobile'];
@@ -59,10 +59,7 @@
         }
 
     }
-
     async function onUpdate() {
-
-
         let firstName = document.getElementById('firstName').value;
         let lastName = document.getElementById('lastName').value;
         let mobile = document.getElementById('mobile').value;
@@ -89,7 +86,7 @@
                 password:password
             })
             hideLoader();
-            if(res.status===200 && res.data['status']==='success'){
+            if(res.data['status']==='success'){
                 successToast(res.data['message']);
                 await getProfile();
             }
