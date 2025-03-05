@@ -22,27 +22,30 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[UserController::class,'homePage']);
 
 
+
+// Login page routes
 Route::post('/user-registration', [UserController::class, 'UserRegistration']);
+Route::get('/userRegistration',[UserController::class,'RegistrationPage']);
 Route::post('/user-login', [UserController::class, 'UserLogin']);
+Route::get('/userLogin',[UserController::class,'LoginPage']);
 Route::post('/send-otp', [UserController::class, 'SendOtpCode']);
+Route::get('/sendOtp',[UserController::class,'SendOtpPage']);
 Route::post('/verify-otp', [UserController::class, 'VerifyOtpCode']);
+Route::get('/verifyOtp',[UserController::class,'VerifyOtpPage']);
 Route::post('/reset-password', [UserController::class, 'ResetPassword']);
 
-Route::get('/user-profile', [UserController::class, 'UserProfile'])->middleware([TokenVerificationMiddleware::class]);
-Route::post('/user-update', [UserController::class, 'UpdateProfile'])->middleware([TokenVerificationMiddleware::class]);
-
-Route::get('/logout', [UserController::class, 'UserLogout']);
-// Logib oage routes
-Route::get('/userLogin',[UserController::class,'LoginPage']);
-Route::get('/userRegistration',[UserController::class,'RegistrationPage']);
-Route::get('/sendOtp',[UserController::class,'SendOtpPage']);
-Route::get('/verifyOtp',[UserController::class,'VerifyOtpPage']);
 Route::get('/resetPassword',[UserController::class,'ResetPassPage']);
+
+//Logout Routes
+Route::get('/logout', [UserController::class, 'UserLogout']);
 
 //dashboard page routes
 Route::get('/dashboard',[DashboardController::class,'DashboardPage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/userProfile',[UserController::class,'ProfilePage'])->middleware([TokenVerificationMiddleware::class]);
 
+//Profile Page Route
+Route::get('/user-profile', [UserController::class, 'UserProfile'])->middleware([TokenVerificationMiddleware::class]);
+Route::post('/user-update', [UserController::class, 'UpdateProfile'])->middleware([TokenVerificationMiddleware::class]);
 //Category Routes
 Route::get('categoryPage',[categoryController::class,'CategoryPage'])->middleware([TokenVerificationMiddleware::class]);
 Route::post('create-category',[categoryController::class,'CreateCategory'])->middleware([TokenVerificationMiddleware::class]);
