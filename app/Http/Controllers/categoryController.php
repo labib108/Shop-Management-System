@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class categoryController extends Controller
 {
-    function CategoryPage()
+    public function CategoryPage()
     {
         $categories = category::all();
         return view('pages.dashboard.category-page',compact('categories'));
     }
-    function CreateCategory(Request $request)
+    public function CreateCategory(Request $request)
     {
         $user_id = $request->header('id');
         return category::create([
@@ -22,7 +22,7 @@ class categoryController extends Controller
             'user_id' => $user_id
         ]);
     }
-    function updateCategory(Request $request)
+    public function updateCategory(Request $request)
     {
         $category_name = $request->input('name');
         $categoryId = $request->input('id');
@@ -43,7 +43,7 @@ class categoryController extends Controller
             ]);
         }
     }
-    function DeleteCategory($id )
+    public function DeleteCategory($id )
     {
         $category = Category::find($id);
         if ($category) {
