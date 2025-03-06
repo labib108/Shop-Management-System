@@ -3,64 +3,83 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\User;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
+
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+
+    public function CustomerList()
     {
-        //
+        $customers = Customer::all();
+        return $customers; 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function CustomerPage()
     {
-        //
+        $customers = Customer::with('user')->get();
+        return view('pages.dashboard.customer-page',compact('customers'));
+    }
+    
+    public function CreateCustomer(Request $request)
+    {
+        $user_id = $request->header('id');
+        if($user_id)
+        {
+            return Customer::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'mobile' => $request->input('mobile'),
+                'address' => $request->input('address'),
+                'user_id'=> $user_id
+            ]);
+        }
+        else{
+            return response()->json([
+                'error' => 'User ID is required'], 
+                400);
+        }
+        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function UpdateCustomer(Request $request)
     {
-        //
-    }
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $mobile = $request->input('mobile');
+        $address = $request->input('address');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Customer $customer)
-    {
-        //
+        return Customer::where('id',$id)->update([
+            'name'=> $name,
+            'email'=> $email,
+            'mobile'=> $mobile,
+            'address'=> $address
+        ]);
+        
+        
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Customer $customer)
+    public function DeleteCustomer( $id )
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Customer $customer)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Customer $customer)
-    {
-        //
+        $customer = Customer::find($id);
+        try{
+            if($customer){
+                $customer->delete();
+                return response()->json([
+                    'message'=> 'Customer delete successfully'
+                ]);
+            }
+        }
+        catch(Exception $e){
+            return response()->json([
+                'error'=> $e->getMessage()
+                ],400);
+            }     
     }
 }

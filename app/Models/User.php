@@ -21,4 +21,9 @@ class User extends Model
     protected $attributes = [
         'otp'=> '0'
     ];
+
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
 }
