@@ -24,8 +24,18 @@
                                 <input id="mobile" placeholder="Mobile" class="form-control" type="mobile"/>
                             </div>
                             <div class="col-md-4 p-2">
+                                <label>Address</label>
+                                <input id="address" placeholder="Address" class="form-control" type="text"/>
+                            </div>
+                            <div class="col-md-4 p-2">
                                 <label>Password</label>
                                 <input id="password" placeholder="User Password" class="form-control" type="password"/>
+                            </div>
+                        </div>
+                        <div class="row m-0 p-0">
+                            <div class="col-md-4 p-2">
+                            <label for="image">Uplode Image</label>
+                            <input type="file" id="image" name="image" class="form-control">
                             </div>
                         </div>
                         <div class="row m-0 p-0">
@@ -41,29 +51,14 @@
 </div>
 
 <script>
-
-
-    async function getProfile(){
-        showLoader();
-        let res=await axios.get("/user-profile");
-        hideLoader();
-        if(res.data['status']==='success'){
-            let data = res.data['data']
-            document.getElementById('firstName').value=data['firstName'];
-            document.getElementById('lastName').value=data['lastName'];
-            document.getElementById('mobile').value=data['mobile'];
-            document.getElementById('password').value=data['password'];
-        }
-        else{
-            errorToast(res.data['message'])
-        }
-
-    }
+    
     async function onUpdate() {
         let firstName = document.getElementById('firstName').value;
         let lastName = document.getElementById('lastName').value;
         let mobile = document.getElementById('mobile').value;
+        let address = document.getElementById('address').value;
         let password = document.getElementById('password').value;
+        let image = document.getElementById('image').files[0];
 
         if(firstName.length===0){
             errorToast('First Name is required')
@@ -79,19 +74,26 @@
         }
         else{
             showLoader();
-            let res=await axios.post("/user-update",{
-                firstName:firstName,
-                lastName:lastName,
-                mobile:mobile,
-                password:password
-            })
-            hideLoader();
-            if(res.data['status']==='success'){
-                successToast(res.data['message']);
-                await getProfile();
+            let formData = new FormData();
+            formData.append('firstName',firstName);
+            formData.append('lastName',lastName);
+            formData.append('mobile',mobile);
+            formData.append('address',address);
+            formData.append('password',password);
+            if(image)
+            {
+                formData.append('image', image);
             }
-            else{
-                errorToast(res.data['message'])
+            try{
+                let res=await axios.post("/user-update",formData,{
+                     headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                hideLoader();
+            }catch(err){
+                hideLoader();
+                errorToast('Error updating profile')
             }
         }
     }

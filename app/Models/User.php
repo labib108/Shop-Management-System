@@ -13,8 +13,10 @@ class User extends Model
         'lastName',
         'email',
         'mobile',
+        'address',
         'password',
-        'otp'
+        'otp',
+        'image',
     ];
     protected $attributes = [
         'otp'=> '0'

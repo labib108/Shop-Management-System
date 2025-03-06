@@ -33,7 +33,6 @@ Route::get('/sendOtp',[UserController::class,'SendOtpPage']);
 Route::post('/verify-otp', [UserController::class, 'VerifyOtpCode']);
 Route::get('/verifyOtp',[UserController::class,'VerifyOtpPage']);
 Route::post('/reset-password', [UserController::class, 'ResetPassword']);
-
 Route::get('/resetPassword',[UserController::class,'ResetPassPage']);
 
 //Logout Routes
@@ -41,9 +40,9 @@ Route::get('/logout', [UserController::class, 'UserLogout']);
 
 //dashboard page routes
 Route::get('/dashboard',[DashboardController::class,'DashboardPage'])->middleware([TokenVerificationMiddleware::class]);
-Route::get('/userProfile',[UserController::class,'ProfilePage'])->middleware([TokenVerificationMiddleware::class]);
 
 //Profile Page Route
+Route::get('/userProfile',[UserController::class,'ProfilePage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/user-profile', [UserController::class, 'UserProfile'])->middleware([TokenVerificationMiddleware::class]);
 Route::post('/user-update', [UserController::class, 'UpdateProfile'])->middleware([TokenVerificationMiddleware::class]);
 //Category Routes

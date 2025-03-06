@@ -10,6 +10,7 @@ use Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Database\QueryException;
 
@@ -127,7 +128,7 @@ class UserController extends Controller
         }
     }
 
-    function ResetPassword(Request $request) {
+    public function ResetPassword(Request $request) {
         try {
             $email = $request->header('email');
             $password = $request->input('password'); // Get the password from the request
@@ -146,39 +147,55 @@ class UserController extends Controller
 
     public function UserProfile(Request $request) {
         $email = $request->header('email');
-        $user = User::where('email','=',$email)->first();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'User profile fetched successfully',
-                'user' => $user,
-            ]);
-        }
-        function UpdateProfile(Request $request) {
+        $user = User::where('email',$email)->first();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User profile fetched successfully',
+            'user' => $user,
+        ]);
+    }
+    public   function UpdateProfile(Request $request) {
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $email = $request->header('email');
+        $user = User::where('email',$email)->first();
+
         try {
-            $email = $request->header('email');
-            $firstName = $request->input('firstName');
-            $lastName = $request->input('lastName');
-            $mobile = $request->input('mobile');
-            $password =  $request->input('password');
-            $user = User::where('email','=',$email)->update([
+            $firstName = $request->input('firstName') ?? $user->firstName;
+            $lastName = $request->input('lastName')?? $user->lastName;
+            $mobile = $request->input('mobile')?? $user->mobile;
+            $address = $request->input('address')?? $user->address;
+            $password =  $request->input('password') ? Hash::make($request->input('password')) : $user->password;
+
+            if($request->hasFile('image')) {
+                $image = $request->file('image');
+                $path = $image->storeAs('images', uniqid() . '.' . $image->getClientOriginalExtension(), 'public');
+                $user->image = $path;
+            }
+            $user->update([
                 'firstName' => $firstName,
                 'lastName' => $lastName,
                 'mobile' => $mobile,
-                'password' => $password
-        ]); // Update the password in the database
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Profile updated successfully',
-        ]);
+                'address' => $address,
+                'password' => $password,
+                'image' => $user->image,
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Profile updated successfully',
+            ]);
+        }catch (Exception $e) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Invalid email' // Return an error message if the email is invalid',
+            ], 500);
+        }
     }
-    catch (Exception $e) {
-        return response()->json([
-            'status' => 'failed',
-            'message' => 'Invalid email' // Return an error message if the email is invalid',
-        ], 500);
-    }
-}
     function UserLogout(){
         return redirect('/userLogin')->cookie('token','',-1);
     }
 }
+
+

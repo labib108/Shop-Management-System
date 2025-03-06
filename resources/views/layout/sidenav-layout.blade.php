@@ -42,11 +42,21 @@
 
         <div class="float-right h-auto d-flex">
             <div class="user-dropdown">
-                <img class="icon-nav-img" src="{{asset('images/user.webp')}}" alt=""/>
+
+                @inject('userModel', 'App\Models\User')
+                @php
+                    $email = request()->header('email'); 
+                    $user = $email ? $userModel::where('email', $email)->first() : null;
+                @endphp
+                @if($user && $user->image )
+                    <img class="icon-nav-img" src="{{ asset('storage/' . $user->image) }}" alt="User Image"/>
+                @else
+                    <img class="icon-nav-img" src="{{asset('images/user.webp')}}" alt=""/>
+                @endif
                 <div class="user-dropdown-content ">
                     <div class="mt-4 text-center">
                         <img class="icon-nav-img" src="{{asset('images/user.webp')}}" alt=""/>
-                        <h6>User Name</h6>
+                        <h6>{{ $user ? $user->firstName . ' ' . $user->lastName : 'Guest'}}</h6>
                         <hr class="user-dropdown-divider  p-0"/>
                     </div>
                     <a href="{{url('/userProfile')}}" class="side-bar-item">
