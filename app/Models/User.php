@@ -26,4 +26,7 @@ class User extends Model
     {
         return $this->hasMany(Customer::class);
     }
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

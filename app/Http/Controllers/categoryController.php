@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class categoryController extends Controller
 {
-    public function CategoryPage()
+    public function CategoryPage(Request $request)
     {
-        $categories = category::all();
+        $user_id = $request->header('id');
+        $categories = category::where('user_id', $user_id)->get();
         return view('pages.dashboard.category-page',compact('categories'));
     }
     public function CreateCategory(Request $request)
