@@ -16,25 +16,25 @@ use Illuminate\Database\QueryException;
 
 class UserController extends Controller
 {
-    function homePage():View{
+    public function homePage():View{
         return view('pages.login.login-page');
     }
-    function LoginPage():View{
+    public function LoginPage():View{
         return view('pages.login.login-page');
     }
-    function RegistrationPage():View{
+    public function RegistrationPage():View{
         return view('pages.login.registration-page');
     }
-    function ResetPassPage():View{
+    public function ResetPassPage():View{
         return view('pages.login.reset-pass-page');
     }
-    function SendOtpPage():View{
+    public function SendOtpPage():View{
         return view('pages.login.send-otp-page');
     }
-    function VerifyOtpPage():View{
+    public function VerifyOtpPage():View{
         return view('pages.login.verify-otp-page');
     }
-    function ProfilePage():View{
+    public function ProfilePage():View{
         return view('pages.dashboard.profile-page');
     }
 
@@ -46,6 +46,7 @@ class UserController extends Controller
                 'lastName' => 'required|string|max:50',
                 'email' => 'required|email|unique:users,email|max:50',
                 'mobile' => 'required|string|max:50',
+                'address' => 'required|string|max:50',
                 'password' => 'required|string|min:6',
             ]);
             $validatedData ['password'] = Hash::make($validatedData ['password']);
@@ -156,31 +157,48 @@ class UserController extends Controller
     }
     public   function UpdateProfile(Request $request) {
         $request->validate([
+            'firstName' => 'nullable|string|max:255',
+            'lastName' => 'nullable|string|max:255',
+            'mobile' => 'nullable',
+            'address' => 'nullable|string|max:500',
+            'password' => 'nullable|string|min:4',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $email = $request->header('email');
-        $user = User::where('email',$email)->first();
+        $user_id = $request->header('id');
+        $user = User::where('id',$user_id)->first();
 
         try {
-            $firstName = $request->input('firstName') ?? $user->firstName;
-            $lastName = $request->input('lastName')?? $user->lastName;
-            $mobile = $request->input('mobile')?? $user->mobile;
-            $address = $request->input('address')?? $user->address;
+            // $firstName = $request->input('firstName') ?? $user->firstName;
+            // $lastName = $request->input('lastName')?? $user->lastName;
+            // $mobile = $request->input('mobile')?? $user->mobile;
+            // $address = $request->input('address')?? $user->address;
             $password =  $request->input('password') ? Hash::make($request->input('password')) : $user->password;
 
             if($request->hasFile('image')) {
                 $image = $request->file('image');
-                $path = $image->storeAs('images', uniqid() . '.' . $image->getClientOriginalExtension(), 'public');
-                $user->image = $path;
+                \Log::info('Uploaded file name: ' . $image->getClientOriginalName());
+                $file_name = $image->getClientOriginalName();
+                $img_name = "{$user_id}-{$file_name}";
+                $img_url = "uploads/{$img_name}";
+                $image->move(public_path('uploads'),$img_name);
+                $user->image = $img_url;
             }
+            \Log::info('Has image file: ' . ($request->hasFile('image') ? 'yes' : 'no'));
+
+
+            
+            // if($request->hasFile('image')) {
+            //     $image = $request->file('image');
+            //     $path = $image->storeAs('images', uniqid() . '.' . $image->getClientOriginalExtension(), 'public');
+            //     $user->image = $path;
+            // }
             $user->update([
-                'firstName' => $firstName,
-                'lastName' => $lastName,
-                'mobile' => $mobile,
-                'address' => $address,
-                'password' => $password,
-                'image' => $user->image,
+                'firstName' => $request->input('firstName'),
+                'lastName' => $request->input('lastName'),
+                'mobile' => $request->input('mobile'),
+                'address' => $request->input('address'),
+                'password' =>$password,
             ]);
             return response()->json([
                 'status' => 'success',
@@ -193,7 +211,7 @@ class UserController extends Controller
             ], 500);
         }
     }
-    function UserLogout(){
+    public function UserLogout(){
         return redirect('/userLogin')->cookie('token','',-1);
     }
 }

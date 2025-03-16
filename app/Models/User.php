@@ -29,4 +29,8 @@ class User extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
+
+    public function invoices(){
+        return $this->hasMany(Invoice::class);
+    }
 }

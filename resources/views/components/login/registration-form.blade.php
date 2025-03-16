@@ -30,7 +30,7 @@
                             <div class="row m-2 p-2">
                                 <div class="col-md-4 p-2">
                                     <label>Mobile Number</label>
-                                    <input id="mobile" placeholder="Mobile" class="form-control" type="mobile"/>
+                                    <input id="mobile" placeholder="Mobile" class="form-control" type="tel"/>
                                 </div>
                                 <div class="col-md-4 p-2">
                                     <label>Address</label>
@@ -40,7 +40,7 @@
                         </div>
                         <div class="row m-2 p-2">
                             <div class="col-md-4 p-2">
-                                <button onclick="onRegistration()" class="btn mt-3 w-100  bg-gradient-primary">Complete</button>
+                                <button onclick="onRegistration()" class="btn mt-3 w-100  bg-gradient-primary">Sign Up</button>
                             </div>
                         </div>
                     </div>
@@ -52,10 +52,11 @@
 
 <script>
     async function onRegistration(){
-        let email = document.getElementById('email').value;
         let firstName = document.getElementById('firstName').value;
         let lastName = document.getElementById('lastName').value;
+        let email = document.getElementById('email').value;
         let mobile = document.getElementById('mobile').value;
+        let address = document.getElementById('address').value;
         let password = document.getElementById('password').value;
 
         if (email.length === 0){
@@ -80,13 +81,16 @@
                 lastName:lastName,
                 email:email,
                 mobile:mobile,
+                address:address,
                 password:password
             });
             hideLoader();
-            if(res.status === 200 && res.data['status'] === 'success'){
+            //console.log(res);
+            if(res.status === 201 && res.data['status'] === 'success'){
                 successToast(res.data['message']);
+                //console.log('Redirecting to user login...');
                 setTimeout(() => {
-                    window.location.href = '/userLogin';
+                    window.location.replace('/userLogin');
                 },1000)
             }
             else {

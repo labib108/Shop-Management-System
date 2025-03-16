@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
@@ -68,3 +69,12 @@ Route::post('update-product',[ProductController::class,'UpdateProduct'])->middle
 Route::delete('delete-product',[ProductController::class,'DeleteProduct'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('list-product',[ProductController::class,'ProductList'])->middleware([TokenVerificationMiddleware::class]);
 
+//Invoice Routes
+Route::get('select-invoice',[InvoiceController::class,'SelectInvoice'])->middleware([TokenVerificationMiddleware::class]);
+Route::post('create-invoice',[InvoiceController::class,'CreateInvoice'])->middleware([TokenVerificationMiddleware::class]);
+Route::post('details-invoice',[InvoiceController::class,'DetailsInvoice'])->middleware([TokenVerificationMiddleware::class]);
+Route::post('delete-invoice',[InvoiceController::class,'DeleteInvoice'])->middleware([TokenVerificationMiddleware::class]);
+
+Route::get('invoicePage',[InvoiceController::class,'ShowInvoice'])->middleware([TokenVerificationMiddleware::class]);
+Route::post('invoice-generate',[InvoiceController::class,'InvoiceGeneration'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('invoiceGenerate/{invoice_id}/{customer_id}',[InvoiceController::class,'GenerateInvoice'])->middleware([TokenVerificationMiddleware::class]);

@@ -44,7 +44,7 @@
             </div>
         </a>
 
-        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 animated fadeIn p-2">
+        <a href="{{url("/productPage")}}" class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 animated fadeIn p-2">
             <div class="card card-plain h-100 bg-white">
                 <div class="p-3">
                     <div class="row">
@@ -64,10 +64,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        
-        
+        </a>
+
+
+
         <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 animated fadeIn p-2">
             <div class="card card-plain h-100  bg-white">
                 <div class="p-3">

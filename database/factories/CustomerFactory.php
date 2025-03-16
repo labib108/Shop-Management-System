@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use App\Models\User;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Customer>
  */
@@ -22,7 +22,7 @@ class CustomerFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'mobile' => $this->faker->randomElement($ext).$this->faker->numberBetween(0,99999999),
             'address' => $this->faker->address(),
-            'user_id' => $this->faker->numberBetween(42,51),
+            'user_id' => User::inRandomOrder()->first()->id ?? 55,
         ];
     }
 }

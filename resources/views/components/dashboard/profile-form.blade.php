@@ -84,14 +84,28 @@
             {
                 formData.append('image', image);
             }
+
+            //for (let [key, value] of formData.entries()) {
+            //    console.log(key + ': ' + value);
+            //}
+
             try{
+                //for (let [key, value] of formData.entries()) {
+                //    console.log(key + ': ' + value);
+                //}
                 let res=await axios.post("/user-update",formData,{
                      headers: {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
                 hideLoader();
-            }catch(err){
+                if (res.status === 200 && res.data.status === 'success') {
+                    successToast('Profile updated successfully!');
+                } else {
+                    errorToast(res.data.message || 'Error updating profile');
+                }
+            }
+            catch(err){
                 hideLoader();
                 errorToast('Error updating profile')
             }

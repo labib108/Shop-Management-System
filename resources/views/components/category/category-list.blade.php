@@ -23,7 +23,7 @@
                         <tbody id="tableList">
                             @foreach ($categories as $category)
                             <tr>
-                                <td>{{$category->id}}</td>
+                                <td>{{$loop->iteration}}</td>
                                 <td>{{$category->category_name}}</td>
                                 <td>
                                     <button class="btn editBtn btn-sm btn-outline-success btn-warning" onclick="EditCategory({{$category->id}},'{{$category->category_name}}')" >Edit</button>
