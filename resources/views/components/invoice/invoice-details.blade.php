@@ -35,12 +35,14 @@
                                 </tr>
                                 </thead>
                                 <tbody  class="w-100" id="tableList">
+                                @foreach($invoiceProducts as $invoiceProduct)
                                 <tr>
-                                    <td>{{$invoiceProducts->product->name}}</td>
-                                    <td>{{$invoiceProducts->quantity}}</td>
-                                    <td><i class="bi bi-currency-dollar"></i>{{$invoiceProducts->sale_price}}</td>
+                                    <td>{{$invoiceProduct->product->name}}</td>
+                                    <td>{{$invoiceProduct->quantity}}</td>
+                                    <td><i class="bi bi-currency-dollar"></i>{{$invoiceProduct->sale_price}}</td>
                                     <td><i class="bi bi-currency-dollar"></i>{{$invoices->total}}</td>
                                 </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

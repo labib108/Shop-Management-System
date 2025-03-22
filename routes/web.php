@@ -4,6 +4,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\categoryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -78,3 +79,10 @@ Route::post('delete-invoice',[InvoiceController::class,'DeleteInvoice'])->middle
 Route::get('invoicePage',[InvoiceController::class,'ShowInvoice'])->middleware([TokenVerificationMiddleware::class]);
 Route::post('invoice-generate',[InvoiceController::class,'InvoiceGeneration'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('invoiceGenerate/{invoice_id}/{customer_id}',[InvoiceController::class,'GenerateInvoice'])->middleware([TokenVerificationMiddleware::class]);
+
+//Sales Page
+Route::get('salesPage',[InvoiceController::class,'CreateSales'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('reportPage',[ReportController::class,'ReportPage'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('sales-report/{fromDate}/{toDate}',[ReportController::class,'SalesReport'])->middleware([TokenVerificationMiddleware::class]);
+
+

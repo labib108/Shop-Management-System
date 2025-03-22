@@ -16,11 +16,18 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     
+     public function CreateSales(Request $request)
+     {
+
+         return view('pages.dashboard.sale-page');
+     }
     public function GenerateInvoice($invoice_id,$customer_id,Request $request)
     {
         $user_id = $request->header('id');
         $invoices = Invoice::where('id',$invoice_id)->where('customer_id',$customer_id)->first();
-        $invoiceProducts = InvoiceProduct::where('invoice_id',$invoice_id)->where('user_id',$user_id)->first();
+        $invoiceProducts = InvoiceProduct::where('invoice_id',$invoice_id)->where('user_id',$user_id)->with('product')->get();
         return view('pages.dashboard.invoice.invoice-generate',compact('invoices','invoiceProducts'));
     }
     public function InvoiceGeneration(Request $request)
