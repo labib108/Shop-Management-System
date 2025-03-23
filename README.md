@@ -28,35 +28,25 @@ A modern and efficient **Inventory Management System** built with **Laravel** to
 
 ## 🖥 Screenshots
 ### 📸 Login Page
-<p align="center">
-    <img src="Image/1.png" width="30%" alt="Login Page 1"/>
-    <img src="Image/2.png" width="30%" alt="Login Page 2"/>
-    <img src="Image/3.png" width="30%" alt="Login Page 3"/>
-</p>
-
-<p align="center">
-    <img src="Image/4.png" width="30%" alt="Login Page 4"/>
-    <img src="Image/5.png" width="30%" alt="Login Page 5"/>
-</p>
+![Login](Image/1.png)
+![Login](Image/2.png)
+![Login](Image/3.png)
+![Login](Image/4.png)
+![Login](Image/5.png)
 
 ### 📸 Dashboard
-<p align="center">
-    <img src="Image/6.png" width="49%" alt="Login Page 4"/>
-    <img src="Image/7.png" width="49%" alt="Login Page 5"/>
-</p>
-
+![Dashboard](Image/6.png)
+### 📸 Profile
+![Profile](Image/7.png)
 
 ### 📸 Category Management
-<p align="center">
-    <img src="Image/8.png" width="30%" alt="Login Page 1"/>
-    <img src="Image/9.png" width="30%" alt="Login Page 2"/>
-    <img src="Image/10.png" width="30%" alt="Login Page 3"/>
-</p>
+![Category](Image/8.png)
+![Category](Image/9.png)
+![Category](Image/10.png)
+
 ### 📸 Customer Management
-<p align="center">
-    <img src="Image/11.png" width="30%" alt="Login Page 1"/>
-    <img src="Image/12.png" width="30%" alt="Login Page 2"/>
-</p>
+![Customer](Image/11.png)
+![Customer](Image/12.png)
 
 ### 📸 Product Management
 ![Products](Image/13.png)
