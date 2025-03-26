@@ -1,5 +1,5 @@
-# 📦 Inventory Management System using Laravel
-A modern and efficient **Inventory Management System** built with **Laravel** to streamline stock management, sales tracking, and invoicing with user authentications.
+# 📦 Shop Management System using Laravel
+A modern and efficient **Shop Management System** built with **Laravel** to streamline stock management, sales tracking, and invoicing with user authentications.
 
 ## 🚀 Features
 ### 🛡 Authentication & Security
